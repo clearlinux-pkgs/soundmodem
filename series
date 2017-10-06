@@ -1,0 +1,2 @@
+# Patch from Debian Hamradio Maintainers
+fix-ftbfs-gcc6-matlib-mdet.patch

@@ -1,0 +1,15 @@
+Configure miss: pthread_create in -lpthread32
+Configure miss: sched_setscheduler in -lposix4
+Configure miss: GUID_NULL in -luuid
+Configure miss: sys/audioio.h usability
+Configure miss: sys/audioio.h presence
+Configure miss: sys/audioio.h
+Configure miss: sys/conf.h usability
+Configure miss: sys/conf.h presence
+Configure miss: sys/conf.h
+Configure miss: sys/ioccom.h usability
+Configure miss: sys/ioccom.h presence
+Configure miss: sys/ioccom.h
+Configure miss: rigerror in -lhamlib
+Configure miss: DirectX includes
+Configure miss: ifr_newname in struct ifreq
