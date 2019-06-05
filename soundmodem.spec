@@ -4,7 +4,7 @@
 #
 Name     : soundmodem
 Version  : 0.20
-Release  : 3
+Release  : 4
 URL      : http://download.gna.org/soundmodem/soundmodem-0.20.tar.gz
 Source0  : http://download.gna.org/soundmodem/soundmodem-0.20.tar.gz
 Summary  : Driver and diagnostic utility for Usermode SoundModem
