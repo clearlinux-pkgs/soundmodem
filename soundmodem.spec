@@ -4,15 +4,16 @@
 #
 Name     : soundmodem
 Version  : 0.20
-Release  : 5
+Release  : 6
 URL      : http://download.gna.org/soundmodem/soundmodem-0.20.tar.gz
 Source0  : http://download.gna.org/soundmodem/soundmodem-0.20.tar.gz
 Summary  : Driver and diagnostic utility for Usermode SoundModem
 Group    : Development/Tools
 License  : GPL-2.0
-Requires: soundmodem-bin
-Requires: soundmodem-locales
-Requires: soundmodem-doc
+Requires: soundmodem-bin = %{version}-%{release}
+Requires: soundmodem-license = %{version}-%{release}
+Requires: soundmodem-locales = %{version}-%{release}
+Requires: soundmodem-man = %{version}-%{release}
 BuildRequires : alsa-lib-dev
 BuildRequires : pkgconfig(audiofile)
 BuildRequires : pkgconfig(gtk+-2.0)
@@ -28,6 +29,7 @@ by OSS/Free as Amateur Packet Radio modems.
 %package bin
 Summary: bin components for the soundmodem package.
 Group: Binaries
+Requires: soundmodem-license = %{version}-%{release}
 
 %description bin
 bin components for the soundmodem package.
@@ -36,19 +38,20 @@ bin components for the soundmodem package.
 %package dev
 Summary: dev components for the soundmodem package.
 Group: Development
-Requires: soundmodem-bin
-Provides: soundmodem-devel
+Requires: soundmodem-bin = %{version}-%{release}
+Provides: soundmodem-devel = %{version}-%{release}
+Requires: soundmodem = %{version}-%{release}
 
 %description dev
 dev components for the soundmodem package.
 
 
-%package doc
-Summary: doc components for the soundmodem package.
-Group: Documentation
+%package license
+Summary: license components for the soundmodem package.
+Group: Default
 
-%description doc
-doc components for the soundmodem package.
+%description license
+license components for the soundmodem package.
 
 
 %package locales
@@ -59,29 +62,49 @@ Group: Default
 locales components for the soundmodem package.
 
 
+%package man
+Summary: man components for the soundmodem package.
+Group: Default
+
+%description man
+man components for the soundmodem package.
+
+
 %prep
 %setup -q -n soundmodem-0.20
+cd %{_builddir}/soundmodem-0.20
 %patch1 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-export LANG=C
-export SOURCE_DATE_EPOCH=1507326253
+export LANG=C.UTF-8
+export SOURCE_DATE_EPOCH=1604602029
+export GCC_IGNORE_WERROR=1
+export AR=gcc-ar
+export RANLIB=gcc-ranlib
+export NM=gcc-nm
+export CFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
+export FCFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=4 "
+export FFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=4 "
+export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=4 "
 %configure --disable-static
-make V=1  %{?_smp_mflags}
+make  %{?_smp_mflags}
 
 %check
-export LANG=C
+export LANG=C.UTF-8
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-make VERBOSE=1 V=1 %{?_smp_mflags} check
+make %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1507326253
+export SOURCE_DATE_EPOCH=1604602029
 rm -rf %{buildroot}
+mkdir -p %{buildroot}/usr/share/package-licenses/soundmodem
+cp %{_builddir}/soundmodem-0.20/COPYING %{buildroot}/usr/share/package-licenses/soundmodem/075d599585584bb0e4b526f5c40cb6b17e0da35a
+cp %{_builddir}/soundmodem-0.20/configapp/COPYING %{buildroot}/usr/share/package-licenses/soundmodem/dfac199a7539a404407098a2541b9482279f690d
 %make_install
 %find_lang soundmodem
 
@@ -95,11 +118,18 @@ rm -rf %{buildroot}
 
 %files dev
 %defattr(-,root,root,-)
-/usr/include/*.h
+/usr/include/modem.h
+/usr/include/simd.h
 
-%files doc
-%defattr(-,root,root,-)
-%doc /usr/share/man/man8/*
+%files license
+%defattr(0644,root,root,0755)
+/usr/share/package-licenses/soundmodem/075d599585584bb0e4b526f5c40cb6b17e0da35a
+/usr/share/package-licenses/soundmodem/dfac199a7539a404407098a2541b9482279f690d
+
+%files man
+%defattr(0644,root,root,0755)
+/usr/share/man/man8/soundmodem.8
+/usr/share/man/man8/soundmodemconfig.8
 
 %files locales -f soundmodem.lang
 %defattr(-,root,root,-)
