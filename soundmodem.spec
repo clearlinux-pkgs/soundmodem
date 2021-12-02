@@ -4,7 +4,7 @@
 #
 Name     : soundmodem
 Version  : 0.20
-Release  : 6
+Release  : 7
 URL      : http://download.gna.org/soundmodem/soundmodem-0.20.tar.gz
 Source0  : http://download.gna.org/soundmodem/soundmodem-0.20.tar.gz
 Summary  : Driver and diagnostic utility for Usermode SoundModem
@@ -17,9 +17,11 @@ Requires: soundmodem-man = %{version}-%{release}
 BuildRequires : alsa-lib-dev
 BuildRequires : pkgconfig(audiofile)
 BuildRequires : pkgconfig(gtk+-2.0)
+BuildRequires : pkgconfig(hamlib)
 BuildRequires : pkgconfig(libxml-2.0)
 BuildRequires : util-linux-dev
-Patch1: fix-ftbfs-gcc6-matlib-mdet.patch
+Patch1: 0001-FILPATHLEN-HAMLIB_FILPATHLEN.patch
+Patch2: fix-ftbfs-gcc6-matlib-mdet.patch
 
 %description
 This package contains the driver and the diagnostic utility for
@@ -74,21 +76,22 @@ man components for the soundmodem package.
 %setup -q -n soundmodem-0.20
 cd %{_builddir}/soundmodem-0.20
 %patch1 -p1
+%patch2 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1604602029
+export SOURCE_DATE_EPOCH=1638406359
 export GCC_IGNORE_WERROR=1
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
 export NM=gcc-nm
-export CFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
-export FCFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=4 "
-export FFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=4 "
-export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=4 "
+export CFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=auto "
+export FCFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=auto "
+export FFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=auto "
+export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=auto "
 %configure --disable-static
 make  %{?_smp_mflags}
 
@@ -100,7 +103,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1604602029
+export SOURCE_DATE_EPOCH=1638406359
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/soundmodem
 cp %{_builddir}/soundmodem-0.20/COPYING %{buildroot}/usr/share/package-licenses/soundmodem/075d599585584bb0e4b526f5c40cb6b17e0da35a

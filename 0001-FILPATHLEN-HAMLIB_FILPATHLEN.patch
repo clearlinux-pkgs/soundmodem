@@ -1,0 +1,25 @@
+From e341c4c7fc2b0389db403dce85d2004f59681a23 Mon Sep 17 00:00:00 2001
+From: "Brett T. Warden" <brett.t.warden@intel.com>
+Date: Wed, 1 Dec 2021 16:28:05 -0800
+Subject: [PATCH 1/1] FILPATHLEN->HAMLIB_FILPATHLEN
+
+---
+ soundcard/ptt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/soundcard/ptt.c b/soundcard/ptt.c
+index 22604734331a..bfddefa42064 100644
+--- a/soundcard/ptt.c
++++ b/soundcard/ptt.c
+@@ -204,7 +204,7 @@ int pttinit(struct pttio *state, const char *params[])
+ 			logprintf(MLOG_ERROR, "Hamlib: rig_init model=%d\n", rig_modl);
+ 			goto the_end;
+ 		}
+-		strncpy(state->u.rig_ptr->state.rigport.pathname, path, FILPATHLEN);
++		strncpy(state->u.rig_ptr->state.rigport.pathname, path, HAMLIB_FILPATHLEN);
+ 
+ 		logprintf(MLOG_INFO, "Hamlib: pttinit parsing %s\n", ptr_key ? ptr_key : "NULL" );
+ 
+-- 
+2.34.0
+
